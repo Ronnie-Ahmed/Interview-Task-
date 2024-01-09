@@ -1,0 +1,302 @@
+{% extends "app/base.html" %} {% load static %} {% block content %}
+<style>
+
+
+    .custom-bg-stylish {
+        margin-right: 5px;
+        background: linear-gradient(to right, #8fabe0, #022c47); /* Stylish gradient */
+        padding: 15px; /* Optional padding for better appearance */
+        border-radius: 10px; /* Optional rounded corners */
+        box-shadow: 0 4px 8px rgba(241, 232, 232, 0.877); /* Optional box shadow */
+        color: #fff; /* Optional text color */
+    }
+
+     .stylish-card {
+
+        background-color: #f8f9fa;
+        border-radius: 10px; /* Rounded corners */
+        transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out; /* Hover effect */
+        overflow: hidden; /* Hide overflowing content */
+    }
+
+   
+
+    .stylish-card .card-body {
+        padding: 20px; /* Adjust padding as needed */
+    }
+
+    .stylish-card h6 {
+        color: #333; /* Heading color */
+    }
+
+    .stylish-card .card-title {
+        color: #6c757d; /* Subheading color */
+    }
+
+    .stylish-card .card-subtitle {
+        color: #adb5bd; /* Optional text color */
+    }
+
+    .stylish-card img {
+        border-radius: 50%; /* Make the user pic circular */
+    }
+
+    .stylish-card a.btn {
+        background-color: #007bff; /* Button background color */
+        color: #fff; /* Button text color */
+    }
+
+   
+    .stylish-dropdown-menu {
+        background: linear-gradient(45deg, #3498db, #2ecc71);
+        padding: 15px;
+        border-radius: 8px;
+        box-shadow: 8px 10px 15px rgba(148, 246, 253, 0.979);
+        width: max-content; /* Set the width to fit the content */
+    }
+
+    <!-- .stylish-card a.btn:hover {
+        background-color: #0056b3; /* Button background color on hover */
+    } -->
+      .stylish-create-task-btn {
+        background: linear-gradient(45deg, #3498db, #2ecc71); /* Gradient background with two colors */
+        color: #fff; /* Button text color */
+        border: 2px solid #3498db; /* Border color */
+        border-radius: 5px; /* Rounded corners */
+    }
+
+    <!-- .stylish-create-task-btn:hover {
+        background: linear-gradient(45deg, #2c3e50, #3498db); /* Gradient background on hover */
+        color: #fff; /* Text color on hover */
+    } -->
+   
+    
+</style>
+
+<div class="container mt-4 page-background">
+  <div class="row mt-4">
+  <div class="dropdown mb-4">
+    <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" id="createTaskDropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        Create Task
+    </button>
+    <div class="dropdown-menu stylish-dropdown-menu" aria-labelledby="createTaskDropdown">
+        <form method="post" enctype="multipart/form-data" autocomplete="off" class="px-3 py-2">
+            {% csrf_token %}
+            {{form.as_p}}
+            <div class="dropdown-divider"></div>
+            <button type="submit" class="btn btn-primary dropdown-item stylish-create-task-btn">Create Task</button>
+        </form>
+    </div>
+</div>
+
+    <div class="col custom-bg-stylish ">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h3>Backlog</h3>
+        {% if Backlog_first.id is not None %}
+        <a href="{% url "makeComplete" Backlog_first.id %}" class="btn btn-secondary btn-sm">Completion</a>
+        {% endif %}
+         
+        <span class="badge bg-secondary">{{ Backlog_count }}</span>
+      </div>
+      
+      {% for task in Backlog %}
+      <div class="card mb-4 stylish-card ">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-start">
+            <div>
+              <h6 class="card-text fw-bold ">{{task.taskname}}</h6>
+              {% if task.completed_at is not None %}
+              <p class="card-subtitle text-muted mt-4 ">
+                Completed at: {{task.completed_at}}
+              </p>
+              {% endif %}
+            </div>
+            <div class="d-flex flex-column align-items-end">
+           <img
+              src="{{task.user.userpic.url}}"
+              class="rounded-circle img-thumbnail"
+              alt="User Pic"
+              style="width: 50px; height: 50px"
+            />
+           <div class="d-flex flex-column align-items-center">
+                        <div class="dropdown mt-2">
+                            <button class="btn btn-primary btn-sm dropdown-toggle" type="button"
+                                id="createTaskDropdown" data-bs-toggle="dropdown" aria-haspopup="true"
+                                aria-expanded="false">
+                                Actions
+                            </button>
+                            <div class="dropdown-menu stylish-dropdown-menu">
+                                <a href="{% url "editTask" task.id %}" class="btn btn-primary btn-sm mt-2">Edit</a>
+                                <a href="{% url "deleteTask" task.id %}" class="btn btn-outline-danger btn-sm mt-2">Delete</a>
+                                <a href="{% url "markAsComplete" task.id %}" class="btn btn-outline-success btn-sm mt-2">Complete</a>
+                            </div>
+                        </div>
+                    </div>
+             
+          </div>
+           
+          </div>
+         
+        </div>
+         <small class='card-title mt-2 mb-0 text-center'>{{task.user}}</small>
+      </div>
+      {% endfor %}
+ 
+    </div>
+
+    <div class="col custom-bg-stylish ">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h3>ToDo</h3>
+        {% if ToDo_first.id is not None %}
+        <a href="{% url "makeComplete" ToDo_first.id %}" class="btn btn-secondary btn-sm">Completion</a>
+        {% endif %}
+         
+        <span class="badge bg-secondary">{{ ToDo_count }}</span>
+      </div>
+     {% for task in ToDo %}
+      <div class="card mb-4 stylish-card">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-start">
+            <div>
+              <h6 class="card-text fw-bold ">{{task.taskname}}</h6>
+              {% if task.completed_at is not None %}
+              <p class="card-subtitle text-muted mt-4 ">
+                Completed at: {{task.completed_at}}
+              </p>
+              {% endif %}
+            </div>
+            <div class="d-flex flex-column align-items-end">
+           <img
+              src="{{task.user.userpic.url}}"
+              class="rounded-circle img-thumbnail"
+              alt="User Pic"
+              style="width: 50px; height: 50px"
+            />
+           <div class="d-flex flex-column align-items-center">
+                        <div class="dropdown mt-2">
+                            <button class="btn btn-primary btn-sm dropdown-toggle" type="button"
+                                id="createTaskDropdown" data-bs-toggle="dropdown" aria-haspopup="true"
+                                aria-expanded="false">
+                                Actions
+                            </button>
+                            <div class="dropdown-menu stylish-dropdown-menu">
+                                <a href="{% url "editTask" task.id %}" class="btn btn-primary btn-sm mt-2">Edit</a>
+                                <a href="{% url "deleteTask" task.id %}" class="btn btn-outline-danger btn-sm mt-2">Delete</a>
+                                <a href="{% url "markAsComplete" task.id %}" class="btn btn-outline-success btn-sm mt-2">Complete</a>
+                            </div>
+                        </div>
+                    </div>
+          </div>
+          </div>
+        </div>
+        <small class='card-title mt-2 mb-0 text-center'>{{task.user}}</small>
+      </div>
+      {% endfor %}
+      
+
+    </div>
+
+     <div class="col custom-bg-stylish ">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h3>Doing</h3>
+        {% if Doing_first.id is not None %}
+        <a href="{% url "makeComplete" Doing_first.id %}" class="btn btn-secondary btn-sm">Completion</a>
+        {% endif %}
+         
+        <span class="badge bg-secondary">{{ Doing_count }}</span>
+      </div>
+       {% for task in Doing %}
+      <div class="card mb-4 stylish-card">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-start">
+            <div>
+              <h6 class="card-text fw-bold ">{{task.taskname}}</h6>
+              {% if task.completed_at is not None %}
+              <p class="card-subtitle text-muted mt-4 ">
+                Completed at: {{task.completed_at}}
+              </p>
+              {% endif %}
+            </div>
+            <div class="d-flex flex-column align-items-end">
+           <img
+              src="{{task.user.userpic.url}}"
+              class="rounded-circle img-thumbnail"
+              alt="User Pic"
+              style="width: 50px; height: 50px"
+            />
+           <div class="d-flex flex-column align-items-center">
+                        <div class="dropdown mt-2">
+                            <button class="btn btn-primary btn-sm dropdown-toggle" type="button"
+                                id="createTaskDropdown" data-bs-toggle="dropdown" aria-haspopup="true"
+                                aria-expanded="false">
+                                Actions
+                            </button>
+                            <div class="dropdown-menu stylish-dropdown-menu">
+                                <a href="{% url "editTask" task.id %}" class="btn btn-primary btn-sm mt-2">Edit</a>
+                                <a href="{% url "deleteTask" task.id %}" class="btn btn-outline-danger btn-sm mt-2">Delete</a>
+                                <a href="{% url "markAsComplete" task.id %}" class="btn btn-outline-success btn-sm mt-2">Complete</a>
+                            </div>
+                        </div>
+                    </div>
+          </div>
+          </div>
+        </div>
+        <small class='card-title mt-2 mb-0 text-center'>{{task.user}}</small>
+      </div>
+      {% endfor %}
+      <!-- Add more backlog tasks as needed -->
+    </div>
+
+    <div class="col custom-bg-stylish ">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h3>Done</h3>
+        {% if Completion_first.id is not None %}
+        <a href="{% url "makeComplete" Completion_first.id %}" class="btn btn-secondary btn-sm">Completion</a>
+        {% endif %}
+         
+        <span class="badge bg-secondary">{{ Completion_count }}</span>
+      </div>
+       {% for task in Completion %}
+      <div class="card mb-4 stylish-card  border-5 border-success">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-start">
+            <div>
+              <h6 class="card-text fw-bold ">{{task.taskname}}</h6>
+              {% if task.completed_at is not None %}
+              <p class="card-subtitle text-muted mt-4 ">
+                Completed at: {{task.completed_at}}
+              </p>
+              {% endif %}
+            </div>
+            <div class="d-flex flex-column align-items-end">
+           <img
+              src="{{task.user.userpic.url}}"
+              class="rounded-circle img-thumbnail"
+              alt="User Pic"
+              style="width: 50px; height: 50px"
+            />
+           <div class="d-flex flex-column align-items-center">
+                        <div class="dropdown mt-2">
+                            <button class="btn btn-primary btn-sm dropdown-toggle" type="button"
+                                id="createTaskDropdown" data-bs-toggle="dropdown" aria-haspopup="true"
+                                aria-expanded="false">
+                                Actions
+                            </button>
+                            <div class="dropdown-menu stylish-dropdown-menu">
+                                <a href="{% url "editTask" task.id %}" class="btn btn-primary btn-sm mt-2">Edit</a>
+                                <a href="{% url "deleteTask" task.id %}" class="btn btn-outline-danger btn-sm mt-2">Delete</a>
+                                <a href="{% url "markAsComplete" task.id %}" class="btn btn-outline-success btn-sm mt-2">Complete</a>
+                            </div>
+                        </div>
+                    </div>
+          </div>
+          </div>
+        </div>
+         <small class='card-title mt-2 mb-0 text-center'>{{task.user}}</small>
+      </div>
+      {% endfor %}
+      <!-- Add more completed tasks as needed -->
+    </div>
+  </div>
+</div>
+{% endblock %}

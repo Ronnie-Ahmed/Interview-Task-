@@ -1,0 +1,9 @@
+{% extends "app/base.html" %} {% load static %} {% block content %}
+
+<form method="post" enctype="multipart/form-data" autocomplete="off">
+  {% csrf_token %} {{ form.as_p }}
+
+  <input type="submit" value="Edit Task" />
+</form>
+
+{%endblock%}
