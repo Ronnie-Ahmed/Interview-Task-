@@ -93,7 +93,7 @@
       <div class="d-flex justify-content-between align-items-center mb-3">
         <h3>Backlog</h3>
         {% if Backlog_first.id is not None %}
-        <a href="{% url "makeComplete" Backlog_first.id %}" class="btn btn-secondary btn-sm">Completion</a>
+        <a href="{% url "makeComplete" Backlog_first.id %}" class="btn btn-secondary btn-sm">Complete All</a>
         {% endif %}
          
         <span class="badge bg-secondary">{{ Backlog_count }}</span>
@@ -148,7 +148,7 @@
       <div class="d-flex justify-content-between align-items-center mb-3">
         <h3>ToDo</h3>
         {% if ToDo_first.id is not None %}
-        <a href="{% url "makeComplete" ToDo_first.id %}" class="btn btn-secondary btn-sm">Completion</a>
+        <a href="{% url "makeComplete" ToDo_first.id %}" class="btn btn-secondary btn-sm">Complete All</a>
         {% endif %}
          
         <span class="badge bg-secondary">{{ ToDo_count }}</span>
@@ -200,7 +200,7 @@
       <div class="d-flex justify-content-between align-items-center mb-3">
         <h3>Doing</h3>
         {% if Doing_first.id is not None %}
-        <a href="{% url "makeComplete" Doing_first.id %}" class="btn btn-secondary btn-sm">Completion</a>
+        <a href="{% url "makeComplete" Doing_first.id %}" class="btn btn-secondary btn-sm">Complete All</a>
         {% endif %}
          
         <span class="badge bg-secondary">{{ Doing_count }}</span>
@@ -251,7 +251,7 @@
       <div class="d-flex justify-content-between align-items-center mb-3">
         <h3>Done</h3>
         {% if Completion_first.id is not None %}
-        <a href="{% url "makeComplete" Completion_first.id %}" class="btn btn-secondary btn-sm">Completion</a>
+        <a href="{% url "makeComplete" Completion_first.id %}" class="btn btn-secondary btn-sm">Complete All</a>
         {% endif %}
          
         <span class="badge bg-secondary">{{ Completion_count }}</span>

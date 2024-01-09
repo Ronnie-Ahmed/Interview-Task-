@@ -37,7 +37,7 @@ def Home(request):
         'Completion_count': Completion_count,
         'Backlog_first':Backlog.first,
         'ToDo_first':ToDo.first,
-        'Doing.first':Doing.first,
+        'Doing_first':Doing.first,
         'Completion_first':Completion.first,
         'form':form  
         
